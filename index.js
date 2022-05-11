@@ -13,6 +13,7 @@ mongoose.connect('mongodb://localhost:27017/kipa');
 
 const city = {
     name: 'וינה',
+    img: "",
     restaurants: [{
         name: 'אלף אלף',
         type: 'בשרי',

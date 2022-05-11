@@ -2,9 +2,15 @@ const { Scraper, Root, DownloadContent, OpenLinks, CollectContent } = require('n
 const axios = require("axios");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
+const translate = require("translate");
 
-function translate(hebrewName) {
-    return 'vienna';
+async function translateCityName(hebrewName) {
+    translate.engine = "google"; // Or "yandex", "libre", "deepl"
+    translate.key = process.env.GOOGLE_KEY;
+
+    const cityName = await translate(hebrewName , {from: "he", to: "en"});
+    console.log(cityName);
+    return cityName;
 }
 
 function getRestaurant(RestaurantUrl) {
