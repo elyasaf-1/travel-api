@@ -1,15 +1,17 @@
 const { translate } = require("./../translate");
 const restaurant1 = require("./restaurants/restaurant1");
 const general1 = require("./general/general1");
+const general2 = require("./general/general2");
+
 const MAXLENGTH = 7;
 
 async function get(cityName) {
     const engName = await translate(cityName);
 
-    const promises = [getRestaurants(engName), getGeneral(engName)];
+    const promises = [getRestaurants(engName), getGeneral(engName, cityName)];
 
     return Promise.all(promises).then(([rests, general]) => {
-        return {name: cityName, restaurants: rests, general: general};
+        return {name: cityName, img:'', restaurants: rests, general: general};
     });
 }
 
@@ -36,8 +38,8 @@ function getRestaurants(cityName) {
     });
 }
 
-function getGeneral(cityName) {
-    return Promise.all([general1.get(cityName)]).then((arrOfGeneral) => {
+function getGeneral(cityName, hebrewName) {
+    return Promise.all([general1.get(cityName), general2.get(hebrewName)]).then((arrOfGeneral) => {
 
         return margeAll(arrOfGeneral);
     });
