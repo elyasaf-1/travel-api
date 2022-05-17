@@ -8,6 +8,7 @@ const placeSchema = mongoose.Schema({
 
 const citySchema = mongoose.Schema({
     name: String,
+    img: String,
     restaurants: [placeSchema],
     general: [placeSchema]
 });
