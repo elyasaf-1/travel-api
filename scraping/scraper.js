@@ -2,16 +2,17 @@ const { translate } = require("./../translate");
 const restaurant1 = require("./restaurants/restaurant1");
 const general1 = require("./general/general1");
 const general2 = require("./general/general2");
+const image = require("./image/image")
 
 const MAXLENGTH = 7;
 
 async function get(cityName) {
     const engName = await translate(cityName);
 
-    const promises = [getRestaurants(engName), getGeneral(engName, cityName)];
+    const promises = [getRestaurants(engName), getGeneral(engName, cityName), image.get(engName)];
 
-    return Promise.all(promises).then(([rests, general]) => {
-        return {name: cityName, img:'', restaurants: rests, general: general};
+    return Promise.all(promises).then(([rests, general, img]) => {
+        return {name: cityName, img: img, restaurants: rests, general: general};
     });
 }
 
