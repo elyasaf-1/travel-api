@@ -16,8 +16,44 @@ async function get(cityName) {
     });
 }
 
+function same(rest1, rest2) {
+    let adress1 = rest1.adress.toLowerCase();
+    let adress2 = rest2.adress.toLowerCase();
+
+    if (adress2.length > adress1.length) {
+        const temp = adress1;
+        adress1 = adress2;
+        adress2 = temp;
+    }
+
+    let words = adress2.replace(/[-_]/g, ' ').replace(/[,\.]/g, '').split(' ');
+
+    const counter = words.length;
+
+    words = words.filter((word) => {
+        return !adress1.includes(word);
+    });
+
+    if (counter - words.length > 3) {
+        return true;
+    }
+
+    return false;
+}
+
 function merge(rest1, rest2) {
-    const merged = [...rest1, ...rest2].slice(0, MAXLENGTH);
+    rest2 = rest2.slice(0, MAXLENGTH - rest1.length);
+    rest2 = rest2.filter((rest) => {
+        let put = true;
+        for (const r of rest1) {
+            if (same(r, rest)) {
+                put = false;
+            }
+        }
+        return put;
+    });
+
+    const merged = [...rest1, ...rest2];
 
     return merged;
 }
