@@ -4,7 +4,7 @@ const cors = require("cors");
 const { getData } = require ("./scraping/scraper");
 const City = require("./models/city");
 const Blog = require("./models/blog");
-const { fixName } = require("./translate");
+const { fixName, isNotCity } = require("./helper");
 
 const app = express();
 app.use(express.json());
@@ -30,8 +30,15 @@ app.get('/',function(req,res) {
     res.json({user:'elyasaf'});
 });
 
-app.get('/city', async function(req,res) {
-    const cityName = await fixName(req.query.name);
+app.get('/city', async function(req,res) {  
+    const name = req.query.name;
+
+    if (await isNotCity(name)) {
+        res.json({name: name, img: '', restaurants: [], general: []});
+        return;
+    }
+
+    const cityName = await fixName(name);
 
     City.getCity(cityName).then((city) => {
         if (city) {

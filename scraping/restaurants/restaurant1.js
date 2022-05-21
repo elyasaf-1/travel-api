@@ -31,7 +31,7 @@ async function get(cityName) {
                 promises.push(getRestaurant(restUrl));
             }
             return Promise.all(promises);
-        });   
+        }).catch(() => []);  
 }
 
 module.exports = { get: get };

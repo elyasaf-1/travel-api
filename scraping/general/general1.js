@@ -30,7 +30,7 @@ async function get(cityName) {
                 promises.push(getGeneral(restUrl));
             }
             return Promise.all(promises);
-        });   
+        }).catch(() => []); 
 }
 
 module.exports = { get: get };
