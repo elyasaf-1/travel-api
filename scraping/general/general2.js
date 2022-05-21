@@ -1,8 +1,10 @@
 const axios = require("axios");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
+const { fixCities } = require('../../helper');
 
 function get(cityName) {
+    cityName = fixCities(cityName);
     const baseUrl = 'https://www.xplorer.co.il/tools/chabad';
     
     return axios.get(baseUrl)
@@ -20,7 +22,6 @@ function get(cityName) {
                     const name = rows[j].children[0].textContent.trim();
                     const place = {name: name, type: 'בית חב"ד', adress: adress};
 
-                    //console.log('adress', place);
                     promises.push(place)
                     }
                 }

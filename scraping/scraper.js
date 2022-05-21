@@ -1,4 +1,4 @@
-const { translate } = require("./../translate");
+const { translate } = require("../helper");
 const restaurant1 = require("./restaurants/restaurant1");
 const general1 = require("./general/general1");
 const general2 = require("./general/general2");
@@ -44,13 +44,12 @@ function same(rest1, rest2) {
 function merge(rest1, rest2) {
     rest2 = rest2.slice(0, MAXLENGTH - rest1.length);
     rest2 = rest2.filter((rest) => {
-        let put = true;
         for (const r of rest1) {
             if (same(r, rest)) {
-                put = false;
+                return false;
             }
         }
-        return put;
+        return true;
     });
 
     const merged = [...rest1, ...rest2];
