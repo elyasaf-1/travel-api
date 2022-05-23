@@ -52,19 +52,27 @@ app.get('/city', async function(req,res) {
     }).catch((err) => console.log('err', err));
 });
 
-app.get('/blog',function(req,res) {
-    const cityName = req.query.name;
+app.get('/blog', async function(req,res) {
+    const cityName = await fixName(req.query.name);
 
     Blog.getBlogs(cityName).then((blogs) => {
         res.json(blogs);
-    }).catch((err) => console.log('err', err));
+    }).catch((err) => {
+        console.log('err', err);
+        res.json([]);
+    });
 });
 
-app.post('/blog',function(req,res) {
-    const cityNmae = req.body.city;
+app.post('/blog', async function(req, res) {
+    const cityName = await fixName(req.body.city);
     const description = req.body.content;
 
-    Blog.insert({city: cityNmae, description: description})
+    if (await isNotCity(cityName)) {
+        res.sendStatus(200);
+        return;
+    }
+
+    Blog.insert({city: cityName, description: description})
         .then(() => {
             res.sendStatus(200);
         })

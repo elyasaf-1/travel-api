@@ -16,7 +16,7 @@ async function get(cityName) {
                     return  response.data.photos[0].image.web;               
                 });
             });
-        });   
+        }).catch(() => '');   
 }
 
 module.exports = { get: get };

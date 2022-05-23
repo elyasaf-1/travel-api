@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const image = require("../scraping/image/image");
+const {translate} = require("../helper");
 
 const blogSchema = mongoose.Schema({
     city: String,
@@ -13,8 +15,18 @@ module.exports = {
         return blogDoc.save();
     },
 
-    getBlogs: function (cityName) {
-        return Blog.find({ city: cityName });
+    getBlogs: async function (cityName) {
+        const engName = await translate(cityName);
+        return Blog.find({ city: cityName }).then(async (blogs) => {
+            const img = await image.get(engName);
+
+            blogs = blogs.slice(0, 6);
+
+            const blogsToSend = blogs.map((blog) => {
+                return {city: blog.city, description: blog.description, img: img};
+            })
+            return blogsToSend;
+        });
     }
 };
 

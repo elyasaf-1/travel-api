@@ -33,6 +33,9 @@ async function isNotCity(name) {
                 return true;
             }
             return false;
+        }).catch((err) => {
+            console.log(err);
+            return true;
         });
 }
 
