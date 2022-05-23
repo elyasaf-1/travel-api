@@ -1,5 +1,7 @@
 const { translate } = require("../helper");
 const restaurant1 = require("./restaurants/restaurant1");
+const restaurant2 = require("./restaurants/restaurant2");
+
 const general1 = require("./general/general1");
 const general2 = require("./general/general2");
 const image = require("./image/image")
@@ -9,7 +11,7 @@ const MAXLENGTH = 7;
 async function get(cityName) {
     const engName = await translate(cityName);
 
-    const promises = [getRestaurants(engName), getGeneral(engName, cityName), image.get(engName)];
+    const promises = [getRestaurants(engName, cityName), getGeneral(engName, cityName), image.get(engName)];
 
     return Promise.all(promises).then(([rests, general, img]) => {
         return {name: cityName, img: img, restaurants: rests, general: general};
@@ -67,8 +69,8 @@ function margeAll(arrOfData) {
     return merged;
 }
 
-function getRestaurants(cityName) {
-    return Promise.all([restaurant1.get(cityName)]).then((arrOfRests) => {
+function getRestaurants(cityName, hebrewName) {
+    return Promise.all([restaurant1.get(cityName), restaurant2.get(hebrewName)]).then((arrOfRests) => {
 
         return margeAll(arrOfRests);
     });
